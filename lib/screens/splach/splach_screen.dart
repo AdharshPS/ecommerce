@@ -1,7 +1,10 @@
 import 'package:ecommerce/const/colorconst/app_color_const.dart';
+import 'package:ecommerce/screens/home/home_screen.dart';
 import 'package:ecommerce/screens/login/login_sceen.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,11 +19,23 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     // Navigate to HomeScreen after 3 seconds
     Timer(const Duration(seconds: 3), () {
+      checklogin();
+    });
+  }
+
+  Future<void> checklogin() async {
+    final user = Supabase.instance.client.auth.currentUser;
+    if (user != null) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
+        MaterialPageRoute(builder: (context) => NavScreen()),
       );
-    });
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+      );
+    }
   }
 
   @override
